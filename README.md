@@ -1,6 +1,5 @@
 # Agent Evolution: From LLM Call to Agent System
 
-> An AI agent is not magic — it is a loop.
 > A progressive demonstration of AI agent development, from a single LLM API call to an agent system.
 
 - [Agent Evolution: From LLM Call to Agent System](#agent-evolution-from-llm-call-to-agent-system)
@@ -72,17 +71,13 @@ The focus is not on features, but on how the loop evolves.
 
 ### Stage 1 — LLM API Call
 
-**Goal:**  
 Send a prompt to an LLM via a single API request and print the response.
 
-**Diagram:**
+> Limitation: One-time request with a hardcoded prompt
 
 ```
 prompt ──► LLM API ──► response
 ```
-
-**Limitation:**  
-One-time request with a hardcoded prompt
 
 ---
 
