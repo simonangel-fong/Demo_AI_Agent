@@ -5,8 +5,7 @@
 - [Agent Evolution: From LLM Call to Agent System](#agent-evolution-from-llm-call-to-agent-system)
   - [The Core Loop](#the-core-loop)
   - [Evolution](#evolution)
-    - [The Model](#the-model)
-    - [Stages at a Glance](#stages-at-a-glance)
+    - [Mental Model](#mental-model)
     - [Stage Details](#stage-details)
       - [Stage 1 — LLM API Call](#stage-1--llm-api-call)
       - [Stage 2 — Terminal Input](#stage-2--terminal-input)
@@ -46,9 +45,9 @@ That's it. Everything else is just extending the **input** or the **output**.
 
 ## Evolution
 
-### The Model
+### Mental Model
 
-Every stage in this project is a refinement of the same fundamental model:
+Every stage in this project is a refinement of the same fundamental mental model:
 
 ```
 input → process → output
@@ -58,7 +57,7 @@ As with any system, this follows **"garbage in, garbage out."** Poor inputs or u
 
 The table below shows how each stage maps to existing technology. The stages build on each other, but the model never changes.
 
-### Stages at a Glance
+![pic](./assets/image/io_model.png)
 
 | Stage                     | What Changes                          | Existing Technology     |
 | ------------------------- | ------------------------------------- | ----------------------- |
