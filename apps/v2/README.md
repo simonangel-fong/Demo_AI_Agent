@@ -1,5 +1,7 @@
 ## Test
 
+![pic](../../assets/image/v2_01.png)
+
 ```sh
 python apps/v2/main.py
 # >>User Input:

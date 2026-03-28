@@ -1,9 +1,9 @@
 ## Test
 
-![pic](./v6_01.png)
-![pic](./v6_02.png)
-![pic](./v6_03.png)
-![pic](./v6_04.png)
+![pic](../../assets/image/v6_01.png)
+![pic](../../assets/image/v6_02.png)
+![pic](../../assets/image/v6_03.png)
+![pic](../../assets/image/v6_04.png)
 
 ````bash
 cd apps/v6

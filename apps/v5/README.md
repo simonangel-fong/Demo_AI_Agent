@@ -1,8 +1,8 @@
 ## Test
 
-![pic](./v5_01.png)
+![pic](../../assets/image/v5_01.png)
 
-![pic](./v5_02.png)
+![pic](../../assets/image/v5_02.png)
 
 ```bash
 python apps/v5/main.py

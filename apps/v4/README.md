@@ -1,6 +1,6 @@
 ## Test
 
-![pic](./v4_01.png)
+![pic](../../assets/image/v4_01.png)
 
 ```bash
 python apps/v4/main.py

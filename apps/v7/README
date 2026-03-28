@@ -2,7 +2,7 @@
 
 ```sh
 # test agent
-cd apps/v8/app/agent
+cd apps/v7/app/agent
 python agent.py
 
 ```
@@ -30,7 +30,7 @@ how many skills do you have?
 ## Web UI Test
 
 ```sh
-cd  apps/v8/app
+cd  apps/v7/app
 uvicorn main:app --reload
 
 docker compose -f apps/v8/docker-compose.yaml up -d --build
@@ -42,7 +42,7 @@ docker compose -f apps/v8/docker-compose.yaml up -d --build
 
 ```sh
 # login
-aws ecr get-login-password --region ca-central-1 | docker login --username AWS --password-stdin 099139718958.dkr.ecr.ca-central-1.amazonaws.com
+aws ecr get-login-password --region ca-central-1 | docker login --username AWS --password-stdin aws_id.dkr.ecr.ca-central-1.amazonaws.com
 
 # create repo
 aws ecr create-repository --repository-name ai-agent --region ca-central-1
@@ -50,9 +50,9 @@ aws ecr create-repository --repository-name ai-agent --region ca-central-1
 # Push
 docker build -t ai_agent_demo apps/v8
 # tag
-docker tag ai_agent_demo 099139718958.dkr.ecr.ca-central-1.amazonaws.com/ai-agent
+docker tag ai_agent_demo aws_id.dkr.ecr.ca-central-1.amazonaws.com/ai-agent
 # push to docker
-docker push 099139718958.dkr.ecr.ca-central-1.amazonaws.com/ai-agent
+docker push aws_id.dkr.ecr.ca-central-1.amazonaws.com/ai-agent
 
 # tag 
 docker tag ai_agent_demo simonangelfong/ai-agent
