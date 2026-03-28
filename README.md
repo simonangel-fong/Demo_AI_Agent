@@ -58,16 +58,15 @@ Each stage introduces one concept required to move from a simple `LLM call` to a
 
 The focus is not on features, but on how the loop evolves.
 
-| stage | Name                  | Existing Technology |
-| ----- | --------------------- | ------------------- |
-| 1     | LLM API Call          | API request         |
-| 2     | Prompt in Terminal    | `while` loop        |
-| 3     | Memory via Context    | Array               |
-| 4     | System & User Prompts | String formatting   |
-| 5     | Tool Calling          | CLI command         |
-| 6     | Packages as Skills    | File system I/O     |
-| 7     | Web UI                | FastAPI + HTML      |
-| 8     | Containerization      | Docker              |
+| stage | Name                  | Existing Technology     |
+| ----- | --------------------- | ----------------------- |
+| 1     | LLM API Call          | API request             |
+| 2     | Prompt in Terminal    | `while` loop            |
+| 3     | Memory via Context    | Array                   |
+| 4     | System & User Prompts | String formatting       |
+| 5     | Tool Calling          | CLI command             |
+| 6     | Packages as Skills    | File system I/O         |
+| 7     | Web UI & protable     | FastAPI + HTML + Docker |
 
 ---
 
