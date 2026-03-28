@@ -1,0 +1,60 @@
+# Test
+
+```sh
+# test agent
+cd apps/v8/app/agent
+python agent.py
+
+```
+
+- Prompt to test
+
+```txt
+who are you?
+
+What is the capital of France?
+
+what is 1 + 1?
+
+What is my last question?
+
+Is google.com connectable? show me the details of ping command
+
+What is the weather in NYC?
+
+how many skills do you have?
+```
+
+---
+
+## Web UI Test
+
+```sh
+cd  apps/v8/app
+uvicorn main:app --reload
+
+docker compose -f apps/v8/docker-compose.yaml up -d --build
+```
+
+---
+
+## Push to ECR
+
+```sh
+# login
+aws ecr get-login-password --region ca-central-1 | docker login --username AWS --password-stdin 099139718958.dkr.ecr.ca-central-1.amazonaws.com
+
+# create repo
+aws ecr create-repository --repository-name ai-agent --region ca-central-1
+
+# Push
+docker build -t ai_agent_demo apps/v8
+# tag
+docker tag ai_agent_demo 099139718958.dkr.ecr.ca-central-1.amazonaws.com/ai-agent
+# push to docker
+docker push 099139718958.dkr.ecr.ca-central-1.amazonaws.com/ai-agent
+
+# tag 
+docker tag ai_agent_demo simonangelfong/ai-agent
+docker push simonangelfong/ai-agent
+```

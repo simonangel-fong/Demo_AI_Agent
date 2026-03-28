@@ -1,0 +1,13 @@
+# docker-compose.yml
+services:
+  agent:
+    container_name: agent
+    build: .
+    ports:
+      - "8000:8000"
+    env_file:
+      - ../.env
+    environment:
+      ANTHROPIC_MODEL: claude-haiku-4-5-20251001
+    volumes:
+      - ./export:/code/agent/export

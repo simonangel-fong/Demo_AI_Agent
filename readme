@@ -1,0 +1,165 @@
+# Agent Evolution: From LLM Call to Agent System
+
+> An AI agent is not magic — it is a loop.
+
+- [Agent Evolution: From LLM Call to Agent System](#agent-evolution-from-llm-call-to-agent-system)
+  - [From Hype to Reality](#from-hype-to-reality)
+  - [Evolution](#evolution)
+    - [Version 1 — LLM API Call](#version-1--llm-api-call)
+    - [v1 — LLM API call](#v1--llm-api-call)
+    - [v2 — Prompt in Terminal](#v2--prompt-in-terminal)
+    - [v3 — Memory via context](#v3--memory-via-context)
+    - [v4 — System prompt and User prompt](#v4--system-prompt-and-user-prompt)
+    - [v5 — Tool Calling](#v5--tool-calling)
+    - [v6 — Packages as Skills](#v6--packages-as-skills)
+    - [v7 — Web UI](#v7--web-ui)
+    - [v8 — Containerization](#v8--containerization)
+  - [What an AI Agent Actually Is](#what-an-ai-agent-actually-is)
+    - [Interaction Layer (UI)](#interaction-layer-ui)
+    - [Agent Layer](#agent-layer)
+
+---
+
+## From Hype to Reality
+
+`AI` and `agentic systems` are powerful, but they follow familiar patterns in computing history — and understanding that distinction is what separates hype from sustainable value.
+
+Just as `relational databases` unlocked business value through structured interaction via `SQL`, `LLMs` require well-designed `prompts` and `context` to be effective. The progression from a simple `API call` to an `AI agent` demonstrates that most underlying technologies already exist. The real innovation lies in how they are integrated and applied.
+
+`LLMs` do not replace `computer science` fundamentals or engineering roles — they amplify them. **Strong system design, infrastructure, and operational practices** remain essential to turning AI capabilities into real, measurable business value.
+
+At its core, the interaction model is unchanged: `input → process → output`. And as with any system, `garbage in means garbage out`. Poor inputs or unsafe instructions lead to unintended consequences. Just as an incorrect `SQL DELETE` can damage a database, an unsafe prompt or misconfigured agent introduces real operational risk.
+
+---
+
+## Evolution
+
+Each version introduces one concept required to move from a simple `LLM call` to an `agent system`.
+
+The focus is not on features, but on how the loop evolves.
+
+
+### Version 1 — LLM API Call
+
+**Gooal**: 
+Sends a fixed prompt to the LLM and prints the response.
+
+**Diagram:**  
+user input → LLM API → response  
+
+```mermaid
+graph TD;
+    A[User Input] --> B[LLM API];
+    B --> C[Ouput];
+```
+
+**Key idea:**  
+An LLM is just an API — no agent, no loop, no system.
+
+
+
+
+
+### v1 — LLM API call
+
+**Goal:** show that calling an LLM is just an API call — a skill any programmer already has.  
+**What it does:** hardcoded prompt + API key → print response.
+
+---
+
+### v2 — Prompt in Terminal
+
+**Goal:** enable interactive usage.  
+**What it does:** terminal loop (`while True`) → input → API → output.
+
+**Key idea:** interaction loop (UI layer), not the agent itself
+
+---
+
+### v3 — Memory via context
+
+**Goal:** introduce the simplest form of memory.  
+**What it does:** send full conversation history on every request.
+
+**Key idea:** context = memory
+
+---
+
+### v4 — System prompt and User prompt
+
+**Goal:** control behavior and output format.  
+**What it does:** separates system/user prompts and enforces structure.
+
+**Key idea:** prompts define behavior
+
+---
+
+### v5 — Tool Calling
+
+**Goal:** enable interaction with the external world.  
+**What it does:** LLM triggers tools → executes → feeds result back.
+
+**Key idea:** tools = controlled side effects
+
+---
+
+### v6 — Packages as Skills
+
+**Goal:** shift from code-driven to configuration-driven behavior.  
+**What it does:** define behavior and tools via files (`system.md`, `skills.md`).
+
+**Key idea:** agent behavior becomes modular
+
+---
+
+### v7 — Web UI
+
+**Goal:** decouple interaction from execution.  
+**What it does:** expose the agent through a web interface.
+
+**Key idea:** UI is not the agent
+
+---
+
+### v8 — Containerization
+
+**Goal:** make the system portable and reproducible.  
+**What it does:** package the full stack into a container.
+
+**Key idea:** agent becomes a deployable system
+
+---
+
+## What an AI Agent Actually Is
+
+An AI agent is not a model, and it is not the user interface.
+
+It is the system that sits between them.
+
+At its core, an agent is a loop:
+
+- receive input
+- send context to the LLM
+- interpret the response
+- optionally execute tools
+- update state
+- repeat
+
+Two layers are often confused:
+
+### Interaction Layer (UI)
+
+- terminal loop (`while True`)
+- web UI (FastAPI)
+- handles user input and output
+
+### Agent Layer
+
+- manages context
+- controls tool execution
+- orchestrates the LLM loop
+
+The UI enables interaction.  
+The agent enables behavior.
+
+---

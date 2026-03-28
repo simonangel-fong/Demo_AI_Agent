@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Agent</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #0e0e10;
+            --surface: #18181c;
+            --border: rgba(255, 255, 255, 0.08);
+            --border-hi: rgba(255, 255, 255, 0.15);
+            --text: #e8e8e6;
+            --muted: #888884;
+            --accent: #c8f07a;
+            --accent-dim: #8fab4e;
+            --thinking: #3b3b3f;
+            --skill: #1e2a1a;
+            --command: #1a1e2a;
+            --output: #1a1a1e;
+            --error: #2a1a1a;
+            --font-body: 'DM Sans', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --radius: 10px;
+        }
+
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: var(--font-body);
+            font-size: 15px;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        /* ── Header ── */
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 24px;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-family: var(--font-mono);
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--accent);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .session-badge {
+            font-family: var(--font-mono);
+            font-size: 11px;
+            color: var(--muted);
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 3px 10px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-ghost {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--muted);
+            font-family: var(--font-body);
+            font-size: 12px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .btn-ghost:hover {
+            border-color: var(--border-hi);
+            color: var(--text);
+        }
+
+        /* ── Feed ── */
+        #feed {
+            flex: 1;
+            overflow-y: auto;
+            padding: 32px 0;
+            scroll-behavior: smooth;
+        }
+
+        .feed-inner {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        /* empty state */
+        .empty {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            height: 100%;
+            min-height: 300px;
+            text-align: center;
+        }
+
+        .empty-icon {
+            font-size: 32px;
+            opacity: 0.25;
+        }
+
+        .empty p {
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        /* task bubble (user) */
+        .task-bubble {
+            align-self: flex-end;
+            background: var(--accent);
+            color: #0e0e10;
+            border-radius: var(--radius) var(--radius) 2px var(--radius);
+            padding: 10px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            max-width: 80%;
+            word-break: break-word;
+            animation: slide-in-right 0.2s ease;
+        }
+
+        /* event blocks */
+        .event-block {
+            border-radius: var(--radius);
+            padding: 12px 16px;
+            font-size: 13px;
+            animation: fade-up 0.2s ease;
+            word-break: break-word;
+        }
+
+        .event-block .label {
+            font-family: var(--font-mono);
+            font-size: 10px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .event-block .label::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .event-block pre {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            white-space: pre-wrap;
+            line-height: 1.5;
+            overflow-x: auto;
+        }
+
+        /* thinking */
+        .ev-thinking {
+            background: var(--thinking);
+            border: 1px solid var(--border);
+            color: var(--muted);
+        }
+
+        .ev-thinking .label {
+            color: #66656a;
+        }
+
+        .ev-thinking .label::before {
+            background: #555;
+        }
+
+        /* skill */
+        .ev-skill {
+            background: var(--skill);
+            border: 1px solid rgba(100, 180, 80, 0.15);
+            color: #a8d88a;
+        }
+
+        .ev-skill .label {
+            color: #7ab85e;
+        }
+
+        .ev-skill .label::before {
+            background: #7ab85e;
+        }
+
+        /* command */
+        .ev-command {
+            background: var(--command);
+            border: 1px solid rgba(100, 140, 220, 0.15);
+            color: #9ab4e8;
+        }
+
+        .ev-command .label {
+            color: #7899d4;
+        }
+
+        .ev-command .label::before {
+            background: #7899d4;
+        }
+
+        /* output */
+        .ev-output {
+            background: var(--output);
+            border: 1px solid var(--border);
+            color: #b0aeaa;
+        }
+
+        .ev-output .label {
+            color: var(--muted);
+        }
+
+        .ev-output .label::before {
+            background: var(--muted);
+        }
+
+        /* complete */
+        .ev-complete {
+            background: var(--surface);
+            border: 1px solid rgba(200, 240, 122, 0.2);
+            color: var(--text);
+            font-size: 14px;
+            line-height: 1.7;
+        }
+
+        .ev-complete .label {
+            color: var(--accent-dim);
+        }
+
+        .ev-complete .label::before {
+            background: var(--accent);
+        }
+
+        .ev-complete .body {
+            color: var(--text);
+        }
+
+        /* error */
+        .ev-error {
+            background: var(--error);
+            border: 1px solid rgba(220, 80, 80, 0.2);
+            color: #e88a8a;
+        }
+
+        .ev-error .label {
+            color: #c96060;
+        }
+
+        .ev-error .label::before {
+            background: #c96060;
+        }
+
+        /* spinner */
+        .thinking-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 0;
+            color: var(--muted);
+            font-size: 13px;
+            font-family: var(--font-mono);
+            animation: fade-up 0.2s ease;
+        }
+
+        .dots span {
+            display: inline-block;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--muted);
+            animation: pulse 1.2s infinite ease-in-out;
+            margin-right: 3px;
+        }
+
+        .dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        /* ── Input area ── */
+        #input-area {
+            flex-shrink: 0;
+            padding: 16px 24px 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .input-row {
+            max-width: 760px;
+            margin: 0 auto;
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        #task-input {
+            flex: 1;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            color: var(--text);
+            font-family: var(--font-body);
+            font-size: 14px;
+            padding: 12px 16px;
+            resize: none;
+            min-height: 48px;
+            max-height: 160px;
+            outline: none;
+            transition: border-color 0.15s;
+            line-height: 1.5;
+        }
+
+        #task-input::placeholder {
+            color: var(--muted);
+        }
+
+        #task-input:focus {
+            border-color: var(--border-hi);
+        }
+
+        #send-btn {
+            background: var(--accent);
+            color: #0e0e10;
+            border: none;
+            border-radius: var(--radius);
+            width: 48px;
+            height: 48px;
+            cursor: pointer;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: opacity 0.15s, transform 0.1s;
+        }
+
+        #send-btn:hover {
+            opacity: 0.85;
+        }
+
+        #send-btn:active {
+            transform: scale(0.95);
+        }
+
+        #send-btn:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+
+        /* ── Animations ── */
+        @keyframes fade-up {
+            from {
+                opacity: 0;
+                transform: translateY(6px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slide-in-right {
+            from {
+                opacity: 0;
+                transform: translateX(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes pulse {
+
+            0%,
+            80%,
+            100% {
+                transform: scale(0.6);
+                opacity: 0.4;
+            }
+
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <span class="logo">&#9679; Agent</span>
+        <div class="header-actions">
+            <span class="session-badge" id="session-label">connecting…</span>
+            <button class="btn-ghost" id="reset-btn">reset session</button>
+        </div>
+    </header>
+
+    <div id="feed">
+        <div class="feed-inner" id="feed-inner">
+            <div class="empty" id="empty-state">
+                <div class="empty-icon">&#9670;</div>
+                <p>Type a task to get started.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="input-area">
+        <div class="input-row">
+            <textarea id="task-input" placeholder="Describe a task…" rows="1"></textarea>
+            <button id="send-btn" title="Run">&#9654;</button>
+        </div>
+    </div>
+
+    <script>
+        const API = '';
+
+        let sessionId = null;
+        let running = false;
+
+        const feedInner = document.getElementById('feed-inner');
+        const sessionLabel = document.getElementById('session-label');
+        const taskInput = document.getElementById('task-input');
+        const sendBtn = document.getElementById('send-btn');
+        const resetBtn = document.getElementById('reset-btn');
+
+        // Disable input until session is ready
+        taskInput.disabled = true;
+        sendBtn.disabled = true;
+
+        async function createSession() {
+            try {
+                const res = await fetch(`${API}/sessions`, { method: 'POST' });
+                const data = await res.json();
+                sessionId = data.session_id;
+                sessionLabel.textContent = 'session: ' + sessionId.slice(0, 8);
+                taskInput.disabled = false;
+                sendBtn.disabled = false;
+                taskInput.focus();
+            } catch (err) {
+                sessionLabel.textContent = 'connection failed';
+                sessionLabel.style.color = '#e88a8a';
+            }
+        }
+
+        resetBtn.addEventListener('click', async () => {
+            if (!sessionId) return;
+            await fetch(`${API}/sessions/${sessionId}/reset`, { method: 'POST' });
+            feedInner.innerHTML = '';
+            feedInner.appendChild(emptyStateEl());
+        });
+
+        function emptyStateEl() {
+            const d = document.createElement('div');
+            d.className = 'empty';
+            d.id = 'empty-state';
+            d.innerHTML = `<div class="empty-icon">&#9670;</div><p>Type a task to get started.</p>`;
+            return d;
+        }
+
+        taskInput.addEventListener('input', () => {
+            taskInput.style.height = 'auto';
+            taskInput.style.height = Math.min(taskInput.scrollHeight, 160) + 'px';
+        });
+
+        taskInput.addEventListener('keydown', e => {
+            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submit(); }
+        });
+
+        sendBtn.addEventListener('click', submit);
+
+        async function submit() {
+            if (running || !sessionId) return;
+            const task = taskInput.value.trim();
+            if (!task) return;
+
+            taskInput.value = '';
+            taskInput.style.height = 'auto';
+            setRunning(true);
+
+            const es = document.getElementById('empty-state');
+            if (es) es.remove();
+
+            appendEl(taskBubble(task));
+
+            const spinner = spinnerEl();
+            feedInner.appendChild(spinner);
+            scrollFeed();
+
+            const url = `${API}/sessions/${sessionId}/run?task=${encodeURIComponent(task)}`;
+            const sse = new EventSource(url);
+
+            sse.onmessage = (e) => {
+                const event = JSON.parse(e.data);
+                if (spinner.parentNode) spinner.remove();
+                appendEl(eventBlock(event));
+                scrollFeed();
+                if (event.type === 'complete' || event.type === 'error') {
+                    sse.close();
+                    setRunning(false);
+                }
+            };
+
+            sse.onerror = () => {
+                if (spinner.parentNode) spinner.remove();
+                appendEl(eventBlock({ type: 'error', content: 'Connection lost. Is the server running?' }));
+                sse.close();
+                setRunning(false);
+                scrollFeed();
+            };
+        }
+
+        function appendEl(el) { feedInner.appendChild(el); }
+
+        function scrollFeed() {
+            document.getElementById('feed').scrollTop = document.getElementById('feed').scrollHeight;
+        }
+
+        function setRunning(v) {
+            running = v;
+            sendBtn.disabled = v;
+            taskInput.disabled = v;
+        }
+
+        function taskBubble(text) {
+            const d = document.createElement('div');
+            d.className = 'task-bubble';
+            d.textContent = text;
+            return d;
+        }
+
+        function spinnerEl() {
+            const d = document.createElement('div');
+            d.className = 'thinking-indicator';
+            d.innerHTML = `<div class="dots"><span></span><span></span><span></span></div><span>thinking...</span>`;
+            return d;
+        }
+
+        const EVENT_META = {
+            thinking: { label: 'thinking', cls: 'ev-thinking', mono: true },
+            skill: { label: 'loading skill', cls: 'ev-skill', mono: true },
+            command: { label: 'command', cls: 'ev-command', mono: true },
+            output: { label: 'output', cls: 'ev-output', mono: true },
+            complete: { label: 'complete', cls: 'ev-complete', mono: false },
+            error: { label: 'error', cls: 'ev-error', mono: true },
+        };
+
+        function eventBlock({ type, content }) {
+            const meta = EVENT_META[type] || EVENT_META.error;
+            const wrap = document.createElement('div');
+            wrap.className = `event-block ${meta.cls}`;
+
+            const lbl = document.createElement('div');
+            lbl.className = 'label';
+            lbl.textContent = meta.label;
+            wrap.appendChild(lbl);
+
+            const body = document.createElement('div');
+            body.className = 'body';
+            if (meta.mono) {
+                const pre = document.createElement('pre');
+                pre.textContent = content;
+                body.appendChild(pre);
+            } else {
+                body.textContent = content;
+            }
+            wrap.appendChild(body);
+            return wrap;
+        }
+
+        createSession();
+    </script>
+</body>
+
+</html>

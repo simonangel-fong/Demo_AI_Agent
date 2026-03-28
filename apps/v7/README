@@ -1,0 +1,46 @@
+# Test
+
+```sh
+cd apps/v7
+uvicorn main:app --reload
+```
+
+- Prompt to test
+
+```txt
+who are you?
+
+What is the capital of France?
+
+what is 1 + 1?
+
+What is my last question?
+
+Is google.com connectable?
+
+What is the weather in NYC?
+
+how many skills do you have?
+
+Create a file named "weather.txt" and write the wind speed data.
+```
+
+![pic](./pic/v07_01.png)
+
+![pic](./pic/v07_02.png)
+
+![pic](./pic/v07_03.png)
+
+![pic](./pic/v07_04.png)
+
+![pic](./pic/v07_05.png)
+
+![pic](./pic/v07_06.png)
+
+![pic](./pic/v07_07.png)
+
+![pic](./pic/v07_08.png)
+
+![pic](./pic/v07_09.png)
+
+![pic](./pic/v07_10.png)
