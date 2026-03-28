@@ -49,15 +49,13 @@ That's it. Everything else is just extending the **input** or the **output**.
 
 Every stage in this project is a refinement of the same fundamental mental model:
 
+> _As with any system, this follows **"garbage in, garbage out."** Poor inputs or unsafe instructions lead to unintended consequences — just as a bad `SQL DELETE` can corrupt a database, a misconfigured agent can cause real operational harm._
+
 ```
 input → process → output
 ```
 
-As with any system, this follows **"garbage in, garbage out."** Poor inputs or unsafe instructions lead to unintended consequences — just as a bad `SQL DELETE` can corrupt a database, a misconfigured agent can cause real operational harm.
-
-The table below shows how each stage maps to existing technology. The stages build on each other, but the model never changes.
-
-![pic](./assets/image/io_model.png)
+The table below shows how each stage maps to existing technology.
 
 | Stage                     | What Changes                          | Existing Technology     |
 | ------------------------- | ------------------------------------- | ----------------------- |
@@ -68,6 +66,12 @@ The table below shows how each stage maps to existing technology. The stages bui
 | 5 — Tool Calling          | Interact with the external world      | CLI command             |
 | 6 — Config-Driven Skills  | Change behavior without touching code | File system I/O         |
 | 7 — Web UI & Container    | Accessible to anyone, runs anywhere   | FastAPI + HTML + Docker |
+
+The stages build on each other, but the fundamental model never changes.
+
+![pic](./assets/image/io_model.png)
+
+---
 
 ### Stage Details
 
