@@ -1,79 +1,86 @@
 # Agent Evolution: From LLM Call to Agent System
 
-> A progressive demonstration of AI agent development, from a single LLM API call to an agent system.
+> A progressive demonstration of AI agent development — from a single API call to a full agent system.
 
 - [Agent Evolution: From LLM Call to Agent System](#agent-evolution-from-llm-call-to-agent-system)
-  - [What an AI Agent Actually Is](#what-an-ai-agent-actually-is)
-  - [From Hype to Reality](#from-hype-to-reality)
+  - [The Core Loop](#the-core-loop)
   - [Evolution](#evolution)
-    - [Stage 1 — LLM API Call](#stage-1--llm-api-call)
-    - [Stage 2 — Terminal Input](#stage-2--terminal-input)
-    - [Stage 3 — Conversation Memory](#stage-3--conversation-memory)
-    - [Stage 4 — System \& User Prompts](#stage-4--system--user-prompts)
-    - [Stage 5 — Tool Calling](#stage-5--tool-calling)
-    - [Stage 6 — Packages as Skills](#stage-6--packages-as-skills)
-    - [Stage 7 — Web UI \& Containerize](#stage-7--web-ui--containerize)
+    - [The Model](#the-model)
+    - [Stages at a Glance](#stages-at-a-glance)
+    - [Stage Details](#stage-details)
+      - [Stage 1 — LLM API Call](#stage-1--llm-api-call)
+      - [Stage 2 — Terminal Input](#stage-2--terminal-input)
+      - [Stage 3 — Conversation Memory](#stage-3--conversation-memory)
+      - [Stage 4 — System \& User Prompts](#stage-4--system--user-prompts)
+      - [Stage 5 — Tool Calling](#stage-5--tool-calling)
+      - [Stage 6 — Config-Driven Skills](#stage-6--config-driven-skills)
+      - [Stage 7 — Web UI \& Containerize](#stage-7--web-ui--containerize)
+  - [The Bigger Picture](#the-bigger-picture)
 
 ---
 
-## What an AI Agent Actually Is
+## The Core Loop
 
-An `AI agent` is just a **loop** — the core logic fits in ~10 lines. Every layer on top is existing technology, nothing new.
+An AI agent is just a **loop**. The entire logic fits in ~10 lines. Every layer on top is existing technology — nothing new.
 
-**Core loop:**
-
-```py
+```python
 def main() -> None:
-    client = Anthropic(api_key=ANTHROPIC_API_KEY)                         # 1. Initialize API
-    context = []                                                          # 2. Initialize memory
-    while True:                                                           # 3. Interaction loop
-        user_input = input("\n>> User Input:\n")                          # 4.   Get user input
-        context.append({"role": "user", "content": user_input})           # 5.   Append user input to history
-        while True:                                                       # 6.   Execution loop
-            response = client.messages.create()                           # 7.     Call LLM API
-            llm_output = response.content                                 # 8.     Get output
-            context.append({"role": "assistant", "content": llm_output})  # 9.     Append LLM output to history
-            if llm_output.startswith("complete:"):                        # 10.    Done → break
+    client = Anthropic(api_key=ANTHROPIC_API_KEY)                           # 1. Initialize API
+    context = []                                                            # 2. Initialize memory
+    while True:                                                             # 3. Interaction loop
+        user_input = input("\n>> User Input:\n")                            # 4.   Get user input
+        context.append({"role": "user", "content": user_input})             # 5.   Append to history
+        while True:                                                         # 6.   Execution loop
+            response = client.messages.create()                             # 7.     Call LLM API
+            llm_output = response.content                                   # 8.     Get output
+            context.append({"role": "assistant", "content": llm_output})    # 9.     Append to history
+            if llm_output.startswith("complete:"):                          # 10.    Done → break
                 break
-            elif llm_output.startswith("command:"):                       # 11.    Tool call → execute
+            elif llm_output.startswith("command:"):                         # 11.    Tool call → execute
                 pass
 ```
 
-## From Hype to Reality
-
-`AI` and `agentic systems` are powerful, but they follow familiar patterns in computing history — and understanding that distinction is what separates hype from sustainable value.
-
-Just as `relational databases` unlocked business value through structured interaction via `SQL`, `LLMs` require well-designed `prompts` and `context` to be effective. The progression from a simple `API call` to an `AI agent` demonstrates that most underlying technologies already exist. The real innovation lies in how they are integrated and applied.
-
-`LLMs` do not replace `computer science` fundamentals or engineering roles — they amplify them. **Strong system design, infrastructure, and operational practices** remain essential to turning AI capabilities into real, measurable business value.
-
-At its core, the interaction model is unchanged: `input → process → output`. And as with any system, `garbage in means garbage out`. Poor inputs or unsafe instructions lead to unintended consequences. Just as an incorrect `SQL DELETE` can damage a database, an unsafe prompt or misconfigured agent introduces real operational risk.
+That's it. Everything else is just extending the **input** or the **output**.
 
 ---
 
 ## Evolution
 
-Each stage introduces one concept required to move from a simple `LLM call` to an `agent system`.
+### The Model
 
-The focus is not on features, but on how the loop evolves.
+Every stage in this project is a refinement of the same fundamental model:
 
-| stage | Name                  | Existing Technology     |
-| ----- | --------------------- | ----------------------- |
-| 1     | LLM API Call          | API request             |
-| 2     | Prompt in Terminal    | `while` loop            |
-| 3     | Memory via Context    | Array                   |
-| 4     | System & User Prompts | String formatting       |
-| 5     | Tool Calling          | CLI command             |
-| 6     | Packages as Skills    | File system I/O         |
-| 7     | Web UI & protable     | FastAPI + HTML + Docker |
+```
+input → process → output
+```
+
+As with any system, this follows **"garbage in, garbage out."** Poor inputs or unsafe instructions lead to unintended consequences — just as a bad `SQL DELETE` can corrupt a database, a misconfigured agent can cause real operational harm.
+
+The table below shows how each stage maps to existing technology. The stages build on each other, but the model never changes.
+
+### Stages at a Glance
+
+| Stage                     | What Changes                          | Existing Technology     |
+| ------------------------- | ------------------------------------- | ----------------------- |
+| 1 — LLM API Call          | Send a prompt, get a response         | API request             |
+| 2 — Terminal Input        | Accept user input at runtime          | `while` loop            |
+| 3 — Conversation Memory   | Remember what was said                | Array                   |
+| 4 — System & User Prompts | Control behavior and output format    | String formatting       |
+| 5 — Tool Calling          | Interact with the external world      | CLI command             |
+| 6 — Config-Driven Skills  | Change behavior without touching code | File system I/O         |
+| 7 — Web UI & Container    | Accessible to anyone, runs anywhere   | FastAPI + HTML + Docker |
+
+### Stage Details
+
+_The table above captures the main idea. The following goes deeper into each stage — feel free to skip ahead._
 
 ---
 
-### Stage 1 — LLM API Call
+#### Stage 1 — LLM API Call
 
 Send a prompt to an LLM via a single API request and print the response.
 
-> Limitation: One-time request with a hardcoded prompt
+> **Limitation:** One-time request with a hardcoded prompt.
 
 ```
 prompt ──► LLM API ──► response
@@ -81,11 +88,11 @@ prompt ──► LLM API ──► response
 
 ---
 
-### Stage 2 — Terminal Input
+#### Stage 2 — Terminal Input
 
 Accept user input from the terminal and send it to the LLM.
 
-> Limitation: No memory — each input is a fresh API call with no conversation history.
+> **Limitation:** No memory — each input is a fresh API call with no conversation history.
 
 ```
 user input ──► LLM API ──► response
@@ -95,25 +102,25 @@ user input ──► LLM API ──► response
 
 ---
 
-### Stage 3 — Conversation Memory
+#### Stage 3 — Conversation Memory
 
 Save conversation history by sending the full context on every API request.
 
-> Limitation: Response depends on prompt without persistent format.
+> **Limitation:** Response depends entirely on the prompt — no consistent output format or behavior.
 
 ```
-user input ──► [ history + new input ] ──► LLM API ──► response
+user input ──► [ history + new prompt ] ──► LLM API ──► response
                         ▲                                  │
                         └──────────────────────────────────┘
 ```
 
 ---
 
-### Stage 4 — System & User Prompts
+#### Stage 4 — System & User Prompts
 
 Control LLM behavior and output format via a dedicated system prompt.
 
-> **Limitation:** Outputs text only — the LLM cannot call tools or take actions.
+> **Limitation:** The LLM can only return text — it cannot call tools or take actions.
 
 ```
 user input ──► [ system prompt + history + new prompt ] ──► LLM API ──► response
@@ -123,59 +130,65 @@ user input ──► [ system prompt + history + new prompt ] ──► LLM API 
 
 ---
 
-### Stage 5 — Tool Calling
+#### Stage 5 — Tool Calling
 
 Enable the LLM to interact with the external world by calling tools.
 
-> **Limitation:** System prompt is hardcoded in the program — behavior cannot be changed without modifying the source code.
+> **Limitation:** System prompt is hardcoded — behavior cannot change without modifying source code.
 
 ```
-user input ──► [ system prompt + history + new input ] ──► LLM API ───┬──► text ─────────────┐
-                               ▲                                      │                      │
-                               │                                      └──► tool call         │
-                               │                                               │             │
-                               │                                          CLI tool           │
-                               │                                               │             │
-                               └───────────────────────────────────────────────┴─────────────┘
+user input ────► [ system.md + history + new prompt ] ─────────────► LLM API ──────────────────────┐
+                                  ▲                                                                 │
+                                  ├──────────────────────────────── text ───────────────────────────┘
+                                  │                                                                 │
+                                  └──────── CLI output <─────── CLI tool <────── tool call ─────────┘
 ```
 
 ---
 
-### Stage 6 — Packages as Skills
+#### Stage 6 — Config-Driven Skills
 
-Shift from hardcoded behavior to configuration-driven behavior via external files.
+Shift from hardcoded behavior to configuration-driven behavior via external files. Skills are loaded at runtime — no code changes needed.
 
-> **Limitation:** UI is terminal-only — unfriendly for non-technical users.
+> **Limitation:** UI is terminal-only — inaccessible to non-technical users.
 
 ```
-user input ────► [ system.md + history + new input ] ─────────────► LLM API ───────────────────────┐
-                                  ▲                                                                │
-                                  ├───────────────────────────────────────────────── text ─────────┘
-                                  │                                                                │
-                                  ├───── read skills.md <──┬─── CLI tool <───── tool call ─────────┘
+user input ────► [ system.md + history + new prompt ] ──────────────► LLM API ──────────────────────┐
+                                  ▲                                                                 │
+                                  ├──────────────────────────────────────────── text ───────────────┘
+                                  │                                                                 │
+                                  ├───── read skills.md <──┬─── CLI tool <───── tool call ──────────┘
                                   │                        │
-                                  └────── CLI ouput <──────┘
+                                  └────── CLI output <─────┘
 ```
 
 ---
 
-### Stage 7 — Web UI & Containerize
+#### Stage 7 — Web UI & Containerize
 
-Decouple interaction from execution by exposing the agent through a web interface.
-Portable via Docker.
-
-**Diagram:**
+Expose the agent through a web interface. Portable via Docker.
 
 ```
-                  │ Containerize[Docker]                                                              │
-                  │                                                                                   │
-User input ──► Web UI ──► [ system.md + history + new input ] ─────────► LLM API ───────────────────┐ │
-                  │                         ▲                                                       │ │
-                  │                         ├────────────────────────────── text ───────────────────┘ │
-                  │                         │                                                       │ │
-                  │                         ├───── read skills.md <──┬─── CLI tool <─── tool call───┘ │
-                  │                         │                        │                                │
-                  │                         └────── CLI output <─────┘                                │
+                  ┌─ Docker ──────────────────────────────────────────────────────────────────────┐
+                  │                                                                               │
+User input ──► Web UI ──► [ system.md + history + new input ] ──────► LLM API ─────────────────┐ │
+                  │                        ▲                                                    │ │
+                  │                        ├───────────────────────── text ─────────────────────┘ │
+                  │                        │                                                    │ │
+                  │                        ├───── read skills.md <──┬─── CLI tool <── tool call─┘ │
+                  │                        │                        │                             │
+                  │                        └────── CLI output <─────┘                             │
+                  └───────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
+
+## The Bigger Picture
+
+Think of `LLMs` the way you think of `relational databases`.
+
+`Relational databases` unlocked enormous business value — but only once the ecosystem caught up: `SQL` gave a structured way to interact with them, `ETL` pipelines handled data ingestion, `stored procedures` encoded business logic.
+
+`LLMs` are following the same pattern. The model itself is just the engine. What makes it useful is the ecosystem around it: `prompt engineering` shapes the input, `context management` handles memory, tools like `MCP` extend what it can act on.
+
+The agent in this project is a small instance of that larger pattern. A loop, a context array, a few tool calls — and underneath it all, the same `input → process → output` model that has driven software systems for decades.
